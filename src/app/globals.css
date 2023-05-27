@@ -16,6 +16,10 @@
   }
 }
 
+h1 {
+  font-size: 40px;
+}
+
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
@@ -24,4 +28,9 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+}
+
+input {
+  background: unset;
+  border: 1px solid #fff;
 }

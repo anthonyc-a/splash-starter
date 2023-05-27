@@ -1,113 +1,173 @@
-import Image from 'next/image'
+"use client";
 
-export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+import React, { useState } from "react";
+import { Client, Account, ID } from "appwrite";
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
 
-      <div className="mb-32 grid text-center lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore the Next.js 13 playground.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+const useStore = create(
+  persist(
+    (set: any, get: any) => ({
+      count: 0,
+      inc: () => set({ count: get().count + 1 }),
+    }),
+    {
+      name: "data-storage", // unique name
+      storage: createJSONStorage(() => sessionStorage), // (optional) by default, 'localStorage' is used
+    }
   )
+);
+
+function Counter() {
+  const { count, inc }: any = useStore();
+  return (
+    <div className="counter">
+      <span>{count}</span>
+      <button onClick={inc}>one up</button>
+    </div>
+  );
 }
+
+const client = new Client();
+client
+  .setEndpoint("https://cloud.appwrite.io/v1")
+  .setProject("6470ae40b8510b3d30c7");
+
+const Home = () => {
+  const [email, setEmail]: [email: string, setEmail: any] = useState("");
+  const [data, setData]: any = useState(null);
+
+  const dataStore = create(
+    persist(
+      (set: any, get: any) => ({
+        obj: null,
+        add: (data: any) => set({ obj: (get().obj = data) }),
+        remove: () => set({ obj: (get().obj = null) }),
+      }),
+      {
+        name: "data-storage", // unique name
+        storage: createJSONStorage(() => sessionStorage), // (optional) by default, 'localStorage' is used
+      }
+    )
+  );
+
+  const { obj, add, remove }: any = dataStore();
+  console.log(obj);
+
+  const createAccount = () => {
+    const account = new Account(client);
+
+    // Register User
+    account.create(ID.unique(), email, "password", "Dopeboi Doe").then(
+      (response) => {
+        console.log(response);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  };
+
+  const signIn = () => {
+    const account = new Account(client);
+    const promise = account.createEmailSession(email, "password");
+
+    promise.then(
+      function (response) {
+        updateData();
+        console.log(response); // Success
+        getData();
+        setEmail("");
+      },
+      function (error) {
+        console.log(error); // Failure
+      }
+    );
+  };
+
+  const signOut = () => {
+    const account = new Account(client);
+
+    const promise = account.deleteSession("current");
+
+    remove();
+    localStorage.clear();
+
+    promise.then(
+      function (response) {
+        // Clear local storage
+
+        setData(null);
+        console.log(response); // Success
+        location.reload();
+      },
+      function (error) {
+        console.log(error); // Failure
+      }
+    );
+  };
+
+  const getData = () => {
+    const account = new Account(client);
+    const promise = account.get();
+
+    promise.then(
+      function (response) {
+        add(response);
+        setData(response);
+        console.log(response); // Success
+      },
+      function (error) {
+        console.log(error); // Failure
+      }
+    );
+  };
+
+  const updateData = () => {
+    const account = new Account(client);
+    const promise = account.updatePrefs({ founder: true, currency: 0 });
+
+    promise.then(
+      function (response) {
+        add(response);
+        console.log(response); // Success
+      },
+      function (error) {
+        console.log(error); // Failure
+      }
+    );
+  };
+
+  const googleSignIn = () => {
+    const account = new Account(client);
+    account.createOAuth2Session("google");
+    getData();
+  };
+
+  return (
+    <div>
+      <h1>Hello {obj?.name}</h1>
+      <h3>{obj?.email}</h3>
+      {!obj && (
+        <>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <button onClick={createAccount}>submit</button>
+        </>
+      )}
+      <button onClick={getData}>get data</button>
+      <button onClick={updateData}>update data</button>
+      <br />
+      {!obj && <button onClick={signIn}>sign in</button>}
+      <br />
+      {obj && <button onClick={signOut}>sign out</button>}
+      {!obj && <button onClick={googleSignIn}>google sign in</button>}
+    </div>
+  );
+};
+
+export default Home;
